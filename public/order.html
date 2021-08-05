@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="scripts/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <h1>Orders</h1>
+    <div>
+      Ordered <input type="text" id="iorder" /> <br /><br />
+      Orderdate <input type="date" id="idate" /> <br />
+      <br />
+      Customerid <input type="text" id="icid" /><br />
+      <br />
+      Amount <input type="text" id="iamount" />
+   <br>
+    <button id="btnCreate">Create Orders</button> <br />
+    <br />
+  </div>
+    <hr />
+<div>
+    <button id="btnRead">Read Orders</button>
+    <br />
+    <br />
+    <!-- <p id="readdata">Data</p> -->
+  </div>
+    <hr />
+
+    <p>Customer ID <input type="text" id="iid" /></p>
+    <br />
+    <button id="btnReadID">ReadByID</button>
+
+    <hr />
+    <p>
+      Ordered <input type="text" id="uorder" /> <br /><br />
+      Orderdate <input type="date" id="udate" /> <br />
+      <br />
+      Customerid <input type="text" id="ucid" /><br />
+      <br />
+      Amount <input type="text" id="uamount" />
+    </p>
+
+    <button id="btnUpdate">Update</button>
+
+    <hr />
+    <p>Customer ID<input type="text" id="did" /></p>
+    <br />
+    <button id="btnDelete">Delete by ID</button>
+
+    <!-- Scirpts -->
+    <script>
+      $(document).ready(function () {
+        //var url = "http://localhost:8900/api/customers";
+
+        $("#btnCreate").click(function () {
+          var ordered = $("#iorder").val();
+          var orderdate = $("#idate").val();
+          var customerid = $("#icid").val();
+          var amount = $("#iamount").val();
+
+          var insertdata = {
+            Ordered: ordered,
+            orderdate: orderdate,
+            customerid: customerid,
+            amount: amount,
+          };
+
+          $.ajax({
+            //var insert
+            url: "/api/orders", // url of rest api
+            type: "POST", // request type of rest api
+            data: insertdata, // data to be sent through request body
+            success: function (data) {
+              console.log("new customer is posted to server ");
+              console.log(data);
+            },
+            error: function (err) {
+              console.log(err);
+            },
+          });
+        });
+
+        $("#btnRead").click(function () {
+          //R operation :Read Operation
+
+          $.ajax({
+            url: "/api/orders",
+            type: "GET",
+            success: function (result) {
+              console.log(result);
+              console.log(
+                "All tasks received from server , ultimately from database server"
+              );
+            },
+            error: function (err) {
+              console.log(err);
+            },
+          });
+        });
+
+        $("#btnReadID").click(function () {
+          //R operation :Read Operation
+          var idno = $("#iid").val();
+          $.ajax({
+            url: "/api/orders/" + idno,
+            type: "GET",
+            data: idno,
+            success: function (result) {
+              console.log(result);
+              console.log("Data Received from Database");
+            },
+            error: function (err) {
+              console.log(err);
+            },
+          });
+        });
+
+        $("#btnUpdate").click(function () {
+          //http://localhost:9898/api/customers/76
+
+          var ordered = $("#uorder").val();
+          var orderdate = $("#udate").val();
+          var customerid = $("#ucid").val();
+          var amount = $("#uamount").val();
+
+          var insertdata = {
+            Ordered: ordered,
+            orderdate: orderdate,
+            customerid: customerid,
+            amount: amount,
+          };
+
+          //U operation : Update Operation
+          $.ajax({
+            url:"/api/orders/" , // url of rest api
+            type: "PUT", // request type of rest api
+            data: insertdata, // data to be sent through request body
+            success: function (result) {
+              console.log("customer is updated to server ");
+            },
+            error: function (err) {
+              console.log(err);
+            },
+          });
+        });
+
+        $("#btnDelete").click(function () {
+          // used to delete customer from server
+          //D operation: Delete operation
+          var customerid = $("#did").val();
+         
+          var deleteid = {
+            cusid:customerid,
+          }
+          $.ajax({
+            url:"/api/orders/",
+            type: "DELETE",
+            data:deleteid,
+            success: function (data) {
+              console.log("the customer is deleted from server");
+            },
+            error: function (err) {
+              console.log(err);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
